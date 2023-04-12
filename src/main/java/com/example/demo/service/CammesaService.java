@@ -31,30 +31,43 @@ public class CammesaService {
                         String.class);
     }
 
-    public String feriadoMasCercano(String fecha) throws DateException{ //Retorna el feriado mas cercano
+    public String feriadoMasCercano(String fecha) throws DateException { //Retorna el feriado mas cercano
         //YYYY-MM-DD
         LocalDate today = LocalDate.now();
         LocalDate date = LocalDate.parse(fecha, DateTimeFormatter.ISO_LOCAL_DATE);
-        if(date.isAfter(today)){
+
+        LocalDate feriadoMasCercano = LocalDate.parse(fecha);
+
+        if (date.isAfter(today)) {
             throw new DateException("La fecha ingresada es mayor a la fecha actual");
         }
         int i = 1;
-        boolean res = parseBoolean(esFeriado(fecha));
-        System.out.println(res);
-        while (res) {
-            LocalDate dayAfter = date.plusDays(i);
-            res = parseBoolean(esFeriado(dayAfter.toString()));
-            if (res){
-                return dayAfter.toString();
-            }
 
-            LocalDate dayBefore = date.minusDays(i);
-            res = parseBoolean(esFeriado(dayBefore.toString()));
-            if (res){
-                return dayBefore.toString();
+        boolean esFeriado = parseBoolean(esFeriado(fecha));
+
+        while (!esFeriado) {
+            LocalDate dayAfter = date.plusDays(i);
+            esFeriado = parseBoolean(esFeriado(dayAfter.toString()));
+            if (esFeriado) {
+                feriadoMasCercano = dayAfter;
+            } else {
+                LocalDate dayBefore = date.minusDays(i);
+                esFeriado = parseBoolean(esFeriado(dayBefore.toString()));
+                if (esFeriado) {
+                    feriadoMasCercano = dayBefore;
+                }
             }
             i++;
         }
-        return "Llegó al final";
+        return feriadoMasCercano.toString();
     }
 }
+
+
+
+
+
+
+
+
+
