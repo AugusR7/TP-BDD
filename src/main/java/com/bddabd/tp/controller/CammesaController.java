@@ -26,4 +26,9 @@ public class CammesaController {
     public String cammesa(@RequestParam(value = "fecha", defaultValue = "2023-01-01") String fecha) {
         return cammesaService.esFeriado(fecha);
     }
+
+//    @GetMapping("/getRegions")
+//    public String getRegions() {
+//        return cammesaService.getCountryRegions();
+//    }
 }
