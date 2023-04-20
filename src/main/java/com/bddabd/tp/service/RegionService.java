@@ -28,7 +28,25 @@ public class RegionService {
     }
 
     public void createRegion(RegionDTO regionDTO) {
-        regionRepository.save(new Region(regionDTO.getId(), regionDTO.getName()));
+        System.out.println(
+                regionRepository.save(new Region(regionDTO.getId(), regionDTO.getName()))
+        );
     }
 
+    public String deleteRegion(Integer id) {
+        if(regionRepository.existsById(id)){
+            regionRepository.deleteById(id);
+            return "Region con id " + id + " eliminada";
+        } else {
+            return "Region con id " + id + " no existe";
+        }
+    }
+
+    public List getCountryDemandOnDate(String fecha, Integer id) {
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
+                                + fecha + "&id_region=" + id,
+                        List.class);
+    }
 }
