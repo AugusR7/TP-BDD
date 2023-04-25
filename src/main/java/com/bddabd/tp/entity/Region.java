@@ -1,27 +1,32 @@
 package com.bddabd.tp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CountryRegion")
-public class Region {
+@Table(name = "country_region")
+//@AllArgsConstructor
+@NoArgsConstructor
+public @Data class Region {
     @Id
-    @Column(name = "CountryRegion_Id")
-    @Getter
+    @Column(name = "country_region_id")
     private Integer id;
 
-    @Column(name = "CountryRegion_Name")
-    @Getter
+    @Column(name = "country_region_name")
     private String name;
 
-    public Region() {
-    }
+//    @ElementCollection
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Getter
+    private List<DemandOnDate> demandOnDate = new ArrayList<>();
+
 
     public Region(Integer id, String name) {
         this.id = id;
