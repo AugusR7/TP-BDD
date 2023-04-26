@@ -27,10 +27,8 @@ public class RegionService {
                         List.class);
     }
 
-    public void createRegion(RegionDTO regionDTO) {
-//        System.out.println(
-                regionRepository.save(new Region(regionDTO.getId(), regionDTO.getName()));
-//        );
+    public Region createRegion(RegionDTO regionDTO) {
+        return regionRepository.save(new Region(regionDTO.getId(), regionDTO.getName()));
     }
 
     public String deleteRegion(Integer id) {

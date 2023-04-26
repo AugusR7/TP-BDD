@@ -22,8 +22,7 @@ public @Data class Region {
     @Column(name = "country_region_name")
     private String name;
 
-//    @ElementCollection
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     @Getter
     private List<DemandOnDate> demandOnDate = new ArrayList<>();
 

@@ -2,12 +2,14 @@ package com.bddabd.tp.controller;
 
 import com.bddabd.tp.dto.RegionDTO;
 import com.bddabd.tp.dto.DemandOnDateDTO;
+import com.bddabd.tp.entity.DemandOnDate;
 import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.service.CammesaService;
 import com.bddabd.tp.service.DemandService;
 import com.bddabd.tp.service.RegionService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,30 +50,22 @@ public class RegionController {
     @GetMapping("/demandaFeriadoMasCercano")
     public DemandOnDateDTO demandaFeriadoMasCercano(@RequestParam(value = "fecha") String fecha) {
         String feriadoMasCercanoALaFecha = cammesaService.feriadoMasCercano(fecha);
-
-        List<HashMap> countryDemand = regionService.getCountryDemandOnDate(feriadoMasCercanoALaFecha, 1002);
-
         Region region = regionService.getRegionById(1002);
-        System.out.println(region);
+        if (demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region) != null) {
+            DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
+            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getTotalDemand() / regionDemandOnDate.getDemand().size());
+        } else {
+            List<HashMap> countryDemand = regionService.getCountryDemandOnDate(feriadoMasCercanoALaFecha, 1002);
 
-        for (int i = 0; i < countryDemand.size(); i++) {
-            demandService.createDemand(
-                    new DemandOnDateDTO(
-                        region,
-                        feriadoMasCercanoALaFecha,
-                        (Integer) countryDemand.get(i).get("dem")
-                    )
-            );
+            List<Integer> regionDemand = new ArrayList<Integer>();
+
+            for (HashMap hashMap : countryDemand) {
+                regionDemand.add((Integer) hashMap.get("dem"));
+            }
+            demandService.createDemand(feriadoMasCercanoALaFecha, region, regionDemand);
+            DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
+            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getTotalDemand() / regionDemandOnDate.getDemand().size());
         }
 
-        Integer demanda = 0;
-        for (int i = 0; i < countryDemand.size(); i++) {
-            demanda += (Integer) countryDemand.get(i).get("dem");
-        }
-
-//        String mensaje = "La demanda promedio del país en lá fecha \"" + feriadoMasCercanoALaFecha + "\" fue de: " + demanda / countryDemand.size() + " MW";
-
-        return new DemandOnDateDTO(region, feriadoMasCercanoALaFecha, demanda / countryDemand.size());
-//        return "Hola";
     }
 }

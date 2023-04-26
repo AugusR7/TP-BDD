@@ -3,6 +3,9 @@ package com.bddabd.tp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,14 +30,23 @@ public @Data class DemandOnDate {
     private Region region;
 
 
-    @Column(name = "demand_on_date_demand")
+    @ElementCollection
     @Getter
-    private Integer demand;
+    private List<Integer> demand = new ArrayList<Integer>();
+//    private Integer demand;
 
-    public DemandOnDate(String date, Region region, Integer demand) {
+    public DemandOnDate(String date, Region region, List<Integer> demand) {
         this.date = date;
         this.region = region;
         this.demand = demand;
+    }
+
+    public Integer getTotalDemand() {
+        Integer sum = 0;
+        for (Integer i : this.demand) {
+            sum += i;
+        }
+        return sum;
     }
 
     @Override
