@@ -22,11 +22,15 @@ public class DemandService {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-    public void createDemand(String date, Region region, List<Integer> demand) {
-        demandRepository.save(new DemandOnDate(date, region, demand));
+    public DemandOnDate createDemand(String date, Region region, List<Integer> demand) {
+        return demandRepository.save(new DemandOnDate(date, region, demand));
     }
 
     public DemandOnDate getRegionDemandOnDate(String date, Region region) {
         return demandRepository.findByRegionAndDate(date, region);
+    }
+
+    public List<DemandOnDateDTO> maxDemandDatePerRegion() {
+        return demandRepository.maxDemandDatePerRegion();
     }
 }

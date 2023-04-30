@@ -15,11 +15,11 @@ import java.util.Objects;
 public @Data class DemandOnDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "demand_on_date_id")
+    @Column(name = "id")
     @Getter
     private Integer id;
 
-    @Column(name = "demand_on_date_date")
+    @Column(name = "date")
     @Getter
     private String date;
 

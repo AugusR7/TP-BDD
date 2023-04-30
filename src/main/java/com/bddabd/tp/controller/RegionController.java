@@ -68,4 +68,9 @@ public class RegionController {
         }
 
     }
+
+    @GetMapping("/diaConMayorDemanda")
+    public List<DemandOnDateDTO> diaConMayorDemanda() {
+        return demandService.maxDemandDatePerRegion();
+    }
 }
