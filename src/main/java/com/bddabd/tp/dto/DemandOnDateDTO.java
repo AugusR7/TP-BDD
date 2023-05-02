@@ -1,13 +1,9 @@
 package com.bddabd.tp.dto;
 
 import com.bddabd.tp.entity.Region;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DemandOnDateDTO {

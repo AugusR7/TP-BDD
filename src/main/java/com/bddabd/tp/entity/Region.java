@@ -1,20 +1,20 @@
 package com.bddabd.tp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
+@Data
 @Table(name = "country_region")
 //@AllArgsConstructor
 @NoArgsConstructor
-public @Data class Region {
+
+public class Region {
     @Id
     @Column(name = "country_region_id")
     private Integer id;
@@ -32,13 +32,12 @@ public @Data class Region {
         this.name = name;
     }
 
-    @Override
+/*    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Region))
+        if (!(o instanceof Region region))
             return false;
-        Region region = (Region) o;
         return Objects.equals(this.id, region.id) && Objects.equals(this.name, region.name);
     }
 
@@ -53,5 +52,5 @@ public @Data class Region {
                 + "id=" + this.id
                 + ", name='" + this.name
                 + '}';
-    }
+    }*/
 }
