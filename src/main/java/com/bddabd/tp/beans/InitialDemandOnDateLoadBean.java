@@ -1,7 +1,5 @@
 package com.bddabd.tp.beans;
 
-import com.bddabd.tp.dto.DemandOnDateDTO;
-import com.bddabd.tp.dto.RegionDTO;
 import com.bddabd.tp.entity.DemandOnDate;
 import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.service.DemandService;
@@ -9,7 +7,6 @@ import com.bddabd.tp.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
