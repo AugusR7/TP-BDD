@@ -10,4 +10,5 @@ public class DemandOnDateDTO {
     private Region region;
     private String date;
     private Integer demand;
+    private Double temperature;
 }

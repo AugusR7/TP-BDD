@@ -22,7 +22,7 @@ public class Region {
     @Column(name = "country_region_name")
     private String name;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
     @Getter
     private List<DemandOnDate> demandOnDate = new ArrayList<>();
 

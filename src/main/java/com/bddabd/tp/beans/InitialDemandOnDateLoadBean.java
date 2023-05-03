@@ -20,24 +20,24 @@ public class InitialDemandOnDateLoadBean {
     @Autowired
     private RegionService regionService;
 
-    public void initialLoad() {
-        LOG.info("Initial load of demand on date of regions");
-        List allRegions = regionService.getRegions();
-        List dates = getDatesOfAYear("2022");
-        for (int i = 0; i < allRegions.size(); i++) {
-            for (int e = 0; i < dates.size(); e++) {
-                DemandOnDate demand = demandService.getRegionDemandOnDate((String) dates.get(e), (Region) allRegions.get(i));
-                LOG.info("Creating: " +
-                        demandService.createDemand(
-                                (String) (dates.get(e)),
-                                (Region) (allRegions.get(i)),
-                                demand.getDemand()
-                        ).toString()
-                );
-            }
-        }
-        LOG.info("Initial load of demand on dates finished");
-    }
+//    public void initialDemandLoad() {
+//        LOG.info("Initial load of demand on date of regions");
+//        List allRegions = regionService.getRegions();
+//        List dates = getDatesOfAYear("2022");
+//        for (int i = 0; i < allRegions.size(); i++) {
+//            for (int e = 0; i < dates.size(); e++) {
+//                DemandOnDate demand = demandService.getRegionDemandOnDate((String) dates.get(e), (Region) allRegions.get(i));
+//                LOG.info("Creating: " +
+//                        demandService.createDemand(
+//                                (String) (dates.get(e)),
+//                                (Region) (allRegions.get(i)),
+//                                demand.getDemand()
+//                        ).toString()
+//                );
+//            }
+//        }
+//        LOG.info("Initial load of demand on dates finished");
+//    }
 
     public List<String> getDatesOfAYear(String year) {
         List<String> dates = new ArrayList<>();

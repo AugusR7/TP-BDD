@@ -15,7 +15,7 @@ public class InitialRegionLoadBean {
     @Autowired
     private RegionService regionService;
 
-    public void initialLoad() {
+    public void initialRegionLoad() {
         LOG.info("Initial load of regions");
         List<HashMap> allRegions = regionService.getRegions();
         for (int i = 0; i < allRegions.size(); i++) {

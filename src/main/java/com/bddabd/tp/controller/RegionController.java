@@ -53,7 +53,7 @@ public class RegionController {
         Region region = regionService.getRegionById(1002);
         if (demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region) != null) {
             DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
-            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getTotalDemand() / regionDemandOnDate.getDemand().size());
+            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getDemand() / 289,0.0);
         } else {
             List<HashMap> countryDemand = regionService.getCountryDemandOnDate(feriadoMasCercanoALaFecha, 1002);
 
@@ -62,15 +62,29 @@ public class RegionController {
             for (HashMap hashMap : countryDemand) {
                 regionDemand.add((Integer) hashMap.get("dem"));
             }
-            demandService.createDemand(feriadoMasCercanoALaFecha, region, regionDemand);
+            Integer demand = demandService.getTotalDemand(regionDemand);
+            demandService.createDemand(feriadoMasCercanoALaFecha, region, demand, 0.0);
             DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
-            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getTotalDemand() / regionDemandOnDate.getDemand().size());
+            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), demandService.getTotalDemand(regionDemand) / 289,0.0);
         }
 
     }
 
-    @GetMapping("/diaConMayorDemanda")
-    public List<DemandOnDateDTO> diaConMayorDemanda() {
-        return demandService.maxDemandDatePerRegion();
+
+    @PostMapping("/actualizarRegiones")
+    public String actualizarRegiones() {
+        List<HashMap> allRegions = regionService.getRegions();
+        for (int i = 0; i < allRegions.size(); i++) {
+            regionService.createRegion(
+                    new RegionDTO(
+                            (Integer) (allRegions.get(i)).get("id"),
+                            (String) ((allRegions.get(i)).get("nombre"))
+                    )
+            );
+        }
+        return "Regiones actualizadas";
     }
+
+
+
 }

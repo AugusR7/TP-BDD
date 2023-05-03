@@ -9,15 +9,15 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class TpApplication {
 
-	@Bean(initMethod = "initialLoad")
+	@Bean(initMethod = "initialRegionLoad")
 	public InitialRegionLoadBean initialRegionLoadBean() {
 		return new InitialRegionLoadBean();
 	}
 
-	@Bean(initMethod = "initialLoad")
-	public InitialDemandOnDateLoadBean initialDemandOnDateLoadBean() {
-		return new InitialDemandOnDateLoadBean();
-	}
+//	@Bean(initMethod = "initialDemandLoad")
+//	public InitialDemandOnDateLoadBean initialDemandOnDateLoadBean() {
+//		return new InitialDemandOnDateLoadBean();
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(TpApplication.class, args);

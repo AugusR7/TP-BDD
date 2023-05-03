@@ -41,7 +41,6 @@ public class RegionService {
     }
 
     public List getCountryDemandOnDate(String fecha, Integer id) {
-
         return restTemplateBuilder
                 .build()
                 .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="

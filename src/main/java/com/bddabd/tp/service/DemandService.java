@@ -22,15 +22,43 @@ public class DemandService {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-    public DemandOnDate createDemand(String date, Region region, List<Integer> demand) {
-        return demandRepository.save(new DemandOnDate(date, region, demand));
+    public DemandOnDate createDemand(String date, Region region, Integer demand, Double temperature) {
+        return demandRepository.save(new DemandOnDate(date, region, demand, temperature));
     }
 
     public DemandOnDate getRegionDemandOnDate(String date, Region region) {
         return demandRepository.findByRegionAndDate(date, region);
     }
 
-    public List<DemandOnDateDTO> maxDemandDatePerRegion() {
-        return demandRepository.maxDemandDatePerRegion();
+    public List<Integer> maxDemandDatePerRegion() {
+
+        List<Integer> response = demandRepository.maxDemandDatePerRegion();
+        System.out.println(response);
+        return response;
+    }
+
+    public List demandaYTemperaturaEnFecha(String date, Integer region) {
+        return restTemplateBuilder
+                .build()
+                .getForObject("https://api.cammesa.com/demanda-svc/demanda/ObtieneDemandaYTemperaturaRegionByFecha?fecha="
+                                + date + "&id_region=" + region,
+                        List.class);
+    }
+
+    public Integer getTotalDemand(List<Integer> demand) {
+        Integer sum = 0;
+        for (Integer i : demand) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    public Double getAverageTemp(List<Double> regionTemp) {
+        Double sum = 0.0;
+        for (Double temp : regionTemp) {
+            sum += temp;
+        }
+
+        return sum / regionTemp.size();
     }
 }
