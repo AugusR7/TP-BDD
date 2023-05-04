@@ -1,12 +1,12 @@
 package com.bddabd.tp.beans;
 
-import com.bddabd.tp.entity.DemandOnDate;
 import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.service.DemandService;
 import com.bddabd.tp.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -20,24 +20,37 @@ public class InitialDemandOnDateLoadBean {
     @Autowired
     private RegionService regionService;
 
-//    public void initialDemandLoad() {
-//        LOG.info("Initial load of demand on date of regions");
-//        List allRegions = regionService.getRegions();
-//        List dates = getDatesOfAYear("2022");
-//        for (int i = 0; i < allRegions.size(); i++) {
-//            for (int e = 0; i < dates.size(); e++) {
-//                DemandOnDate demand = demandService.getRegionDemandOnDate((String) dates.get(e), (Region) allRegions.get(i));
-//                LOG.info("Creating: " +
-//                        demandService.createDemand(
-//                                (String) (dates.get(e)),
-//                                (Region) (allRegions.get(i)),
-//                                demand.getDemand()
-//                        ).toString()
-//                );
-//            }
-//        }
-//        LOG.info("Initial load of demand on dates finished");
-//    }
+    public void initialDemandLoad() {
+        LOG.info("Initial load of demand on date of regions");
+        List<Region> allRegions = regionService.getRegions();
+        List dates = getDatesOfAYear("2022");
+        for (int i = 0; i < allRegions.size(); i++) {
+            for (int e = 0; i < dates.size(); e++) {
+                Region region = allRegions.get(i);
+
+                List<HashMap> demandAndTempOnDate = demandService.demandaYTemperaturaEnFecha((String) dates.get(e), (Integer) region.getId());
+                List regionDemand = new ArrayList<Integer>();
+                List regionTemp = new ArrayList<Double>();
+
+                for (HashMap hashMap : demandAndTempOnDate) {
+                    regionDemand.add(hashMap.get("dem"));
+                    if (hashMap.get("temp") != null) regionTemp.add(hashMap.get("temp"));
+                }
+                Integer demand = demandService.getTotalDemand(regionDemand);
+                Double temp = demandService.getAverageTemp(regionTemp);
+
+                LOG.info("Creating: " +
+                        demandService.createDemand(
+                                (String) (dates.get(e)),
+                                region,
+                                demand,
+                                temp
+                        ).toString()
+                );
+            }
+        }
+        LOG.info("Initial load of demand on dates finished");
+    }
 
     public List<String> getDatesOfAYear(String year) {
         List<String> dates = new ArrayList<>();

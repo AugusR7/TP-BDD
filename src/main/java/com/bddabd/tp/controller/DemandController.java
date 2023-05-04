@@ -54,7 +54,7 @@ public class DemandController {
     }
 
     @GetMapping("/diaConMayorDemanda")
-    public List<Integer> diaConMayorDemanda() {
+    public List<DemandOnDate> diaConMayorDemanda() {
         return demandService.maxDemandDatePerRegion();
     }
 }

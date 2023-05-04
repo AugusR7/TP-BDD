@@ -17,6 +17,7 @@ import java.util.List;
 public class Region {
     @Id
     @Column(name = "country_region_id")
+    @Getter
     private Integer id;
 
     @Column(name = "country_region_name")

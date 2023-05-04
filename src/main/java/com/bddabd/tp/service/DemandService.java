@@ -30,10 +30,8 @@ public class DemandService {
         return demandRepository.findByRegionAndDate(date, region);
     }
 
-    public List<Integer> maxDemandDatePerRegion() {
-
-        List<Integer> response = demandRepository.maxDemandDatePerRegion();
-        System.out.println(response);
+    public List<DemandOnDate> maxDemandDatePerRegion() {
+        List<DemandOnDate> response = demandRepository.maxDemandDatePerRegion();
         return response;
     }
 
