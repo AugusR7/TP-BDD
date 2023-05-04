@@ -12,6 +12,6 @@ public interface DemandRepository extends CrudRepository<DemandOnDate, Integer> 
     @Query("SELECT demand FROM DemandOnDate demand WHERE demand.date = ?1 AND demand.region = ?2")
     DemandOnDate findByRegionAndDate(String date, Region region);
 
-    @Query(value = "SELECT" + " new com.bddadb.tp.entity.DemandOnDate(d.date, d.region, d.demand, d.temperature) " + " FROM DemandOnDate d GROUP BY region", nativeQuery = true)
+    @Query(value = "SELECT d.id, d.country_region_id, d.date, d.demand, d.temperature FROM demand_on_date d INNER JOIN (SELECT country_region_id, MAX(demand) AS max_demand FROM demand_on_date GROUP BY country_region_id) md ON d.country_region_id = md.country_region_id AND d.demand = md.max_demand ORDER BY d.country_region_id", nativeQuery = true)
     List<DemandOnDate> maxDemandDatePerRegion();
 }

@@ -14,10 +14,10 @@ public class TpApplication {
 		return new InitialRegionLoadBean();
 	}
 
-//	@Bean(initMethod = "initialDemandLoad")
-//	public InitialDemandOnDateLoadBean initialDemandOnDateLoadBean() {
-//		return new InitialDemandOnDateLoadBean();
-//	}
+	@Bean(initMethod = "initialDemandLoad")
+	public InitialDemandOnDateLoadBean initialDemandOnDateLoadBean() {
+		return new InitialDemandOnDateLoadBean();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(TpApplication.class, args);

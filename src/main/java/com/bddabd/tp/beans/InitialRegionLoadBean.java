@@ -18,8 +18,10 @@ public class InitialRegionLoadBean {
     public void initialRegionLoad() {
         LOG.info("Initial load of regions");
         List<HashMap> allRegions = regionService.getRegions();
-        for (int i = 0; i < allRegions.size(); i++) {
-            LOG.info("Creating: "+
+        int size = 2;
+//        for (int i = 0; i < allRegions.size(); i++) {
+        for (int i = 0; i < size; i++) {
+            LOG.info("Creating: " +
                     regionService.createRegion(
                             new RegionDTO(
                                     (Integer) (allRegions.get(i)).get("id"),

@@ -1,13 +1,12 @@
 package com.bddabd.tp.beans;
 
+import com.bddabd.tp.dto.RegionDTO;
 import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.service.DemandService;
 import com.bddabd.tp.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class InitialDemandOnDateLoadBean {
@@ -21,17 +20,18 @@ public class InitialDemandOnDateLoadBean {
     private RegionService regionService;
 
     public void initialDemandLoad() {
-        LOG.info("Initial load of demand on date of regions");
-        List<Region> allRegions = regionService.getRegions();
+        List<HashMap> allRegions = regionService.getRegions();
         List dates = getDatesOfAYear("2022");
-        for (int i = 0; i < allRegions.size(); i++) {
-            for (int e = 0; i < dates.size(); e++) {
-                Region region = allRegions.get(i);
+        LOG.info("Initial load of demand on date of regions");
 
-                List<HashMap> demandAndTempOnDate = demandService.demandaYTemperaturaEnFecha((String) dates.get(e), (Integer) region.getId());
+//        for (HashMap oneRegion : allRegions) {
+        for (int i = 0; i < 2; i++) {
+            HashMap oneRegion = allRegions.get(i);
+            Region region = regionService.getRegionById((Integer) oneRegion.get("id"));
+            for (Object date : dates) {
+                List<HashMap> demandAndTempOnDate = demandService.demandaYTemperaturaEnFecha((String) date, (Integer) region.getId());
                 List regionDemand = new ArrayList<Integer>();
                 List regionTemp = new ArrayList<Double>();
-
                 for (HashMap hashMap : demandAndTempOnDate) {
                     regionDemand.add(hashMap.get("dem"));
                     if (hashMap.get("temp") != null) regionTemp.add(hashMap.get("temp"));
@@ -39,14 +39,13 @@ public class InitialDemandOnDateLoadBean {
                 Integer demand = demandService.getTotalDemand(regionDemand);
                 Double temp = demandService.getAverageTemp(regionTemp);
 
-                LOG.info("Creating: " +
-                        demandService.createDemand(
-                                (String) (dates.get(e)),
-                                region,
-                                demand,
-                                temp
-                        ).toString()
-                );
+                demandService.createDemand(
+                        (String) date,
+                        region,
+                        demand,
+                        temp
+                ).toString();
+//                );
             }
         }
         LOG.info("Initial load of demand on dates finished");
@@ -57,13 +56,12 @@ public class InitialDemandOnDateLoadBean {
         String[] days = getDays();
         String[] months = getMonths();
 
-        for (int i = 0; i < 12; i++) {
-            if (i == 1 ) {
+        for (int i = 0; i < months.length; i++) {
+            if (i == 1) {
                 for (int e = 0; e < 28; e++) {
                     dates.add(year + '-' + months[i] + '-' + days[e]);
                 }
-            }
-            else {
+            } else {
                 for (int z = 0; z < 30; z++) {
                     dates.add(year + '-' + months[i] + '-' + days[z]);
                 }
@@ -72,38 +70,38 @@ public class InitialDemandOnDateLoadBean {
                 }
             }
         }
-
         return dates;
     }
 
     public String[] getDays() {
         String[] days = new String[31];
-        for (int d = 0; d < 30; d++) {
+        for (int d = 1; d < 32; d++) {
             String day;
             if (d < 10) {
                 day = "0" + Integer.toString(d);
-            }
-            else {
+            } else {
                 day = Integer.toString(d);
             }
-            days[d] = day;
+            days[d - 1] = day;
         }
-
+        LOG.info("Days: " + Arrays.toString(days));
         return days;
     }
 
     public String[] getMonths() {
-        String[] months = new String[12];
-        for (int m = 0; m < 12; m++) {
+        int size = 12;
+        String[] months = new String[size];
+//        for (int m = 1; m < 13; m++) {
+        for (int m = 1; m < size + 1; m++) {
             String month;
             if (m < 10) {
                 month = "0" + Integer.toString(m);
             } else {
                 month = Integer.toString(m);
             }
-            months[m] = month;
+            months[m - 1] = month;
         }
-
+        LOG.info("Months: " + Arrays.toString(months));
         return months;
     }
 }

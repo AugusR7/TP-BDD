@@ -3,6 +3,7 @@ package com.bddabd.tp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Objects;
 @Table(name = "demand_on_date")
 //@AllArgsConstructor
 @NoArgsConstructor
-public @Data class DemandOnDate {
+public @Data class DemandOnDate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,7 +23,7 @@ public @Data class DemandOnDate {
     private String date;
 
     // Lazy porque cuando queremos ver la demanda, se hará con varias demandas a la vez, y no necesariamente vamos a traer a la region (?)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_region_id")
     private Region region;
 
