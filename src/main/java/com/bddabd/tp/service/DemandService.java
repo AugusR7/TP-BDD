@@ -1,6 +1,5 @@
 package com.bddabd.tp.service;
 
-import com.bddabd.tp.dto.DemandOnDateDTO;
 import com.bddabd.tp.entity.DemandOnDate;
 import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.repository.DemandRepository;
@@ -30,8 +29,9 @@ public class DemandService {
         return demandRepository.findByRegionAndDate(date, region);
     }
 
-    public List<DemandOnDate> maxDemandDatePerRegion() {
-        List<DemandOnDate> response = demandRepository.maxDemandDatePerRegion();
+    public List<Object[]> maxDemandDatePerRegion() {
+        List<Object[]> response = demandRepository.maxDemandDatePerRegion();
+        System.out.println(response.get(0)[0]);
         return response;
     }
 

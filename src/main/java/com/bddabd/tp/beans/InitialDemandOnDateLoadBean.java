@@ -56,20 +56,52 @@ public class InitialDemandOnDateLoadBean {
         String[] days = getDays();
         String[] months = getMonths();
 
-        for (int i = 0; i < months.length; i++) {
-            if (i == 1) {
-                for (int e = 0; e < 28; e++) {
-                    dates.add(year + '-' + months[i] + '-' + days[e]);
-                }
-            } else {
-                for (int z = 0; z < 30; z++) {
-                    dates.add(year + '-' + months[i] + '-' + days[z]);
-                }
-                if (i != 3 && i != 5 && i != 8 && i != 10) {
-                    dates.add(year + '-' + months[i] + '-' + days[30]);
-                }
-            }
-        }
+        //for (int i = 0; i < months.length; i++) {
+          //  if (i == 1) {
+            //    for (int e = 0; e < 28; e++) {
+              //      dates.add(year + '-' + months[i] + '-' + days[e]);
+               // }
+           // } else {
+             //   for (int z = 0; z < 30; z++) {
+               //     dates.add(year + '-' + months[i] + '-' + days[z]);
+                //}
+                //if (i != 3 && i != 5 && i != 8 && i != 10) {
+                 //   dates.add(year + '-' + months[i] + '-' + days[30]);
+               // }
+           // }
+        //}
+
+        dates.add("2022-11-01");
+        dates.add("2022-11-02");
+        dates.add("2022-11-03");
+        dates.add("2022-11-04");
+        dates.add("2022-11-05");
+        dates.add("2022-11-06");
+        dates.add("2022-11-07");
+        dates.add("2022-11-08");
+        dates.add("2022-11-09");
+        dates.add("2022-11-10");
+        dates.add("2022-11-11");
+        dates.add("2022-11-12");
+        dates.add("2022-11-13");
+        dates.add("2022-11-14");
+        dates.add("2022-11-15");
+        dates.add("2022-11-16");
+        dates.add("2022-11-17");
+        dates.add("2022-11-18");
+        dates.add("2022-11-19");
+        dates.add("2022-11-20");
+        dates.add("2022-11-21");
+        dates.add("2022-11-22");
+        dates.add("2022-11-23");
+        dates.add("2022-11-24");
+        dates.add("2022-11-25");
+        dates.add("2022-11-26");
+        dates.add("2022-11-27");
+        dates.add("2022-11-28");
+        dates.add("2022-11-29");
+        dates.add("2022-11-30");
+
         return dates;
     }
 
