@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,6 +15,9 @@ public class DemandService {
 
     @Autowired
     DemandRepository demandRepository;
+
+    @Autowired
+            RegionService regionService;
 
     RestTemplateBuilder restTemplateBuilder;
 
@@ -29,10 +33,14 @@ public class DemandService {
         return demandRepository.findByRegionAndDate(date, region);
     }
 
-    public List<Object[]> maxDemandDatePerRegion() {
+    public List<DemandOnDate> maxDemandDatePerRegion() {
         List<Object[]> response = demandRepository.maxDemandDatePerRegion();
-        System.out.println(response.get(0)[0]);
-        return response;
+        List demandsOnDate = new ArrayList();
+        for (Object[] res: response ) {
+            Region region = regionService.getRegionById((Integer) res[1]);
+            demandsOnDate.add(new DemandOnDate((String) res[2], region, (Integer) res[3], (Double) res[4]));
+        }
+        return demandsOnDate;
     }
 
     public List demandaYTemperaturaEnFecha(String date, Integer region) {
