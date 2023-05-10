@@ -24,9 +24,9 @@ public class InitialDemandOnDateLoadBean {
         List dates = getDatesOfAYear("2022");
         LOG.info("Initial load of demand on date of regions");
 
-//        for (HashMap oneRegion : allRegions) {
-        for (int i = 0; i < 2; i++) {
-            HashMap oneRegion = allRegions.get(i);
+        for (HashMap oneRegion : allRegions) {
+//        for (int i = 0; i < 2; i++) {
+//            HashMap oneRegion = allRegions.get(i);
             Region region = regionService.getRegionById((Integer) oneRegion.get("id"));
             for (Object date : dates) {
                 List<HashMap> demandAndTempOnDate = demandService.demandaYTemperaturaEnFecha((String) date, (Integer) region.getId());
@@ -45,7 +45,6 @@ public class InitialDemandOnDateLoadBean {
                         demand,
                         temp
                 ).toString();
-//                );
             }
         }
         LOG.info("Initial load of demand on dates finished");

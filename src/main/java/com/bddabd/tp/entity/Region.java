@@ -16,16 +16,15 @@ import java.util.List;
 
 public class Region implements Serializable {
     @Id
-    @Column(name = "country_region_id")
-//    @Getter
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "country_region_name")
+    @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
-//    @Getter
-    private List<DemandOnDate> demandOnDate = new ArrayList<>();
+//    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
+//    @Column(name = "demand_on_date")
+//    private List<DemandOnDate> demandOnDate = new ArrayList<>();
 
 
     public Region(Integer id, String name) {

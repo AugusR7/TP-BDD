@@ -1,13 +1,15 @@
 package com.bddabd.tp.dto;
 
-import com.bddabd.tp.entity.Region;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandOnDateDTO {
+public class DemandAndTempOnDateDTO {
     private RegionDTO region;
     private String date;
     private Integer demand;
+    private Double temperature;
 }

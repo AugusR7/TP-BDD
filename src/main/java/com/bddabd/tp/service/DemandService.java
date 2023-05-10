@@ -17,7 +17,7 @@ public class DemandService {
     DemandRepository demandRepository;
 
     @Autowired
-            RegionService regionService;
+    RegionService regionService;
 
     RestTemplateBuilder restTemplateBuilder;
 
@@ -26,7 +26,11 @@ public class DemandService {
     }
 
     public DemandOnDate createDemand(String date, Region region, Integer demand, Double temperature) {
-        return demandRepository.save(new DemandOnDate(date, region, demand, temperature));
+        DemandOnDate demandInRepository = demandRepository.findByRegionAndDate(date, region);
+        if (demandInRepository != null)
+            return demandInRepository;
+        else
+            return demandRepository.save(new DemandOnDate(date, region, demand, temperature));
     }
 
     public DemandOnDate getRegionDemandOnDate(String date, Region region) {
@@ -36,7 +40,7 @@ public class DemandService {
     public List<DemandOnDate> maxDemandDatePerRegion() {
         List<Object[]> response = demandRepository.maxDemandDatePerRegion();
         List demandsOnDate = new ArrayList();
-        for (Object[] res: response ) {
+        for (Object[] res : response) {
             Region region = regionService.getRegionById((Integer) res[1]);
             demandsOnDate.add(new DemandOnDate((String) res[2], region, (Integer) res[3], (Double) res[4]));
         }
@@ -54,7 +58,7 @@ public class DemandService {
     public Integer getTotalDemand(List<Integer> demand) {
         Integer sum = 0;
         for (Integer i : demand) {
-            sum += i;
+            if (i != null) sum += i;
         }
         return sum;
     }
@@ -62,7 +66,7 @@ public class DemandService {
     public Double getAverageTemp(List<Double> regionTemp) {
         Double sum = 0.0;
         for (Double temp : regionTemp) {
-            sum += temp;
+            if (temp != null) sum += temp;
         }
 
         return sum / regionTemp.size();

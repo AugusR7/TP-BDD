@@ -53,11 +53,12 @@ public class RegionController {
         Region region = regionService.getRegionById(1002);
         if (demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region) != null) {
             DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
-            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), regionDemandOnDate.getDemand() / 289,0.0);
+            RegionDTO regionDTO = new RegionDTO(regionDemandOnDate.getRegion().getId(), regionDemandOnDate.getRegion().getName());
+            return new DemandOnDateDTO(regionDTO, regionDemandOnDate.getDate(), regionDemandOnDate.getDemand() / 289);
         } else {
             List<HashMap> countryDemand = regionService.getCountryDemandOnDate(feriadoMasCercanoALaFecha, 1002);
-
             List<Integer> regionDemand = new ArrayList<Integer>();
+            Double averageTemp = 0.0;
 
             for (HashMap hashMap : countryDemand) {
                 regionDemand.add((Integer) hashMap.get("dem"));
@@ -65,7 +66,8 @@ public class RegionController {
             Integer demand = demandService.getTotalDemand(regionDemand);
             demandService.createDemand(feriadoMasCercanoALaFecha, region, demand, 0.0);
             DemandOnDate regionDemandOnDate = demandService.getRegionDemandOnDate(feriadoMasCercanoALaFecha, region);
-            return new DemandOnDateDTO(regionDemandOnDate.getRegion(), regionDemandOnDate.getDate(), demandService.getTotalDemand(regionDemand) / 289,0.0);
+            RegionDTO regionDTO = new RegionDTO(regionDemandOnDate.getRegion().getId(), regionDemandOnDate.getRegion().getName());
+            return new DemandOnDateDTO(regionDTO, regionDemandOnDate.getDate(), demandService.getTotalDemand(regionDemand) / 289);
         }
 
     }
@@ -84,7 +86,6 @@ public class RegionController {
         }
         return "Regiones actualizadas";
     }
-
 
 
 }
