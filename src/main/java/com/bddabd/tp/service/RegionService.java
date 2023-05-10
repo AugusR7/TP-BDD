@@ -2,6 +2,7 @@ package com.bddabd.tp.service;
 
 import com.bddabd.tp.dto.RegionDTO;
 import com.bddabd.tp.entity.Region;
+import com.bddabd.tp.repository.DemandRepository;
 import com.bddabd.tp.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -14,6 +15,9 @@ public class RegionService {
 
     @Autowired
     RegionRepository regionRepository;
+
+    @Autowired
+    DemandRepository demandRepository;
     RestTemplateBuilder restTemplateBuilder;
 
     public RegionService(RestTemplateBuilder restTemplateBuilder) {
@@ -33,6 +37,8 @@ public class RegionService {
 
     public String deleteRegion(Integer id) {
         if (regionRepository.existsById(id)) {
+
+            demandRepository.deleteByRegion(id);
             regionRepository.deleteById(id);
             return "Region con id " + id + " eliminada";
         } else {

@@ -17,18 +17,8 @@ public class CammesaController {
         return "ok";
     }
 
-//    @PostMapping("/demandaFeriadoMasCercano")
-//    public String demandaFeriadoMasCercano(@RequestParam(value = "fecha", defaultValue = "2023-01-01") String fecha) {
-//        return cammesaService.feriadoMasCercano(fecha);
-//    }
-
     @GetMapping("/cammesa")
     public String cammesa(@RequestParam(value = "fecha", defaultValue = "2023-01-01") String fecha) {
         return cammesaService.esFeriado(fecha);
     }
-
-//    @GetMapping("/getRegions")
-//    public String getRegions() {
-//        return cammesaService.getCountryRegions();
-//    }
 }

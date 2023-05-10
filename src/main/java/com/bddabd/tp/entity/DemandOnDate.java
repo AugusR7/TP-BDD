@@ -23,7 +23,7 @@ public @Data class DemandOnDate implements Serializable {
     private String date;
 
     // Lazy porque cuando queremos ver la demanda, se hará con varias demandas a la vez, y no necesariamente vamos a traer a la region (?)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // Cascade remove para que cuando se pide remover una region, se removeran las demandas asociadas a la misma
     @JoinColumn(name = "country_region_id")
     private Region region;
 
