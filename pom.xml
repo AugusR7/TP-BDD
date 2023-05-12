@@ -56,6 +56,10 @@
 			<artifactId>JSON</artifactId>
 			<version>0.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
