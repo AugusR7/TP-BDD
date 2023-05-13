@@ -47,7 +47,6 @@ public class BatchConfig {
                     String[] days = getDays();
                     Integer regionId = 1002;
                     PrintWriter csvWriter = new PrintWriter(new File("demands_temperatures.csv"));
-                    StringBuffer csvData = new StringBuffer("");
 
                     for (String i: days) {
                         List<Integer> regionDemand = new ArrayList<>();
@@ -61,24 +60,17 @@ public class BatchConfig {
 
                         Integer demand = demandService.getTotalDemand(regionDemand);
                         Double temp = demandService.getAverageTemp(regionTemp);
-                        csvData.append(regionId.toString());
-                        csvData.append(',');
-                        csvData.append("2023-01-" + i.toString());
-                        csvData.append(',');
-                        csvData.append(demand.toString());
-                        csvData.append(',');
-                        csvData.append(temp.toString());
-                        csvData.append('\n');
-                        csvWriter.write(csvData.toString());
+                        csvWriter.println(regionId.toString() + ',' + "2023-01-" + i.toString() + ',' + demand.toString() + ',' + temp.toString());
                     }
+                    csvWriter.close();
                     return RepeatStatus.FINISHED;
                 }, transactionManager)
                 .build();
     }
 
     public String[] getDays() {
-        String[] days = new String[4];
-        for (int d = 1; d < 5; d++) {
+        String[] days = new String[31];
+        for (int d = 1; d < 32; d++) {
             String day;
             if (d < 10) {
                 day = "0" + Integer.toString(d);
