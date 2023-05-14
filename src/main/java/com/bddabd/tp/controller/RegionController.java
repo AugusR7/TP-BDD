@@ -7,6 +7,7 @@ import com.bddabd.tp.entity.Region;
 import com.bddabd.tp.service.CammesaService;
 import com.bddabd.tp.service.DemandService;
 import com.bddabd.tp.service.RegionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,27 +16,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class RegionController {
 
-    private RegionService regionService;
-    private CammesaService cammesaService;
+    private final RegionService regionService;
+    private final CammesaService cammesaService;
+    private final DemandService demandService;
 
-    private DemandService demandService;
-
-    RegionController(RegionService regionService, CammesaService cammesaService, DemandService demandService) {
-        this.regionService = regionService;
-        this.cammesaService = cammesaService;
-        this.demandService = demandService;
-    }
 
     @GetMapping("/getRegionsByName")
     public List<HashMap> getRegionsByName() {
         List<HashMap> allRegions = regionService.getRegions();
-        for (int i = 0; i < allRegions.size(); i++) {
+        for (HashMap allRegion : allRegions) {
             regionService.createRegion(
                     new RegionDTO(
-                            (Integer) (allRegions.get(i)).get("id"),
-                            (String) ((allRegions.get(i)).get("nombre"))
+                            (Integer) allRegion.get("id"),
+                            (String) (allRegion.get("nombre"))
                     )
             );
         }
@@ -60,8 +56,8 @@ public class RegionController {
             List<Integer> regionDemand = new ArrayList<Integer>();
             Double averageTemp = 0.0;
 
-            for (HashMap hashMap : countryDemand) {
-                regionDemand.add((Integer) hashMap.get("dem"));
+            for (HashMap demand : countryDemand) {
+                regionDemand.add((Integer) demand.get("dem"));
             }
             Integer demand = demandService.getTotalDemand(regionDemand);
             demandService.createDemand(feriadoMasCercanoALaFecha, region, demand, 0.0);
@@ -76,11 +72,11 @@ public class RegionController {
     @PostMapping("/actualizarRegiones")
     public String actualizarRegiones() {
         List<HashMap> allRegions = regionService.getRegions();
-        for (int i = 0; i < allRegions.size(); i++) {
+        for (HashMap region : allRegions) {
             regionService.createRegion(
                     new RegionDTO(
-                            (Integer) (allRegions.get(i)).get("id"),
-                            (String) ((allRegions.get(i)).get("nombre"))
+                            (Integer) region.get("id"),
+                            (String) (region.get("nombre"))
                     )
             );
         }
