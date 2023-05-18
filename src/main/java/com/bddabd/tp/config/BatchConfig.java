@@ -8,11 +8,13 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,25 +28,22 @@ import java.util.*;
 import java.util.logging.Logger;
 
 @Configuration
-@EnableBatchProcessing
+//@EnableBatchProcessing
 public class BatchConfig {
 
-    DemandService demandService;
-    RegionService regionService;
+    @Autowired DemandService demandService;
+    @Autowired RegionService regionService;
 
-    public BatchConfig(DemandService demandService, RegionService regionService) {
-        this.demandService = demandService;
-        this.regionService = regionService;
-    }
 
     private static final Logger log = Logger.getLogger(String.valueOf(BatchConfig.class));
 
     @Bean
     public Job importMonthlyDemandOnRegion(JobRepository jobRepository, Step step1, Step step2) {
-        return new JobBuilder("importDemandAndTemperatureOfAMonth", jobRepository)
+        return new JobBuilder("importMonthlyDemandOnRegion", jobRepository)
                 .incrementer(new RunIdIncrementer())
-                .start(step1)
+                .flow(step1)
                 .next(step2)
+                .end()
                 .build();
     }
 
