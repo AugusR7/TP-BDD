@@ -52,15 +52,15 @@ public class BatchConfig {
         return new StepBuilder("create csv", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     JobParameters jobParameters = chunkContext.getStepContext().getStepExecution().getJobParameters();
-                    String date = jobParameters.getString("fecha");
-                    String[] days = getDays(date);
+                    String yearMonth = jobParameters.getString("fecha");
+                    String[] dates = getDates(yearMonth);
                     Integer regionId = jobParameters.getLong("region").intValue();
                     PrintWriter csvWriter = new PrintWriter(new File("demands_temperatures.csv"));
 
-                    for (String i : days) {
+                    for (String date : dates) {
                         List<Integer> regionDemand = new ArrayList<>();
                         List<Double> regionTemp = new ArrayList<>();
-                        List<HashMap> demandAndTemperatures = regionService.getCountryDemandOnDate("2023-01-" + i, regionId);
+                        List<HashMap> demandAndTemperatures = regionService.getCountryDemandOnDate(date, regionId);
 
                         for (HashMap demandAndTemperature : demandAndTemperatures) {
                             regionDemand.add((Integer) demandAndTemperature.get("dem"));
@@ -69,7 +69,7 @@ public class BatchConfig {
 
                         Integer demand = demandService.getTotalDemand(regionDemand);
                         Double temp = demandService.getAverageTemp(regionTemp);
-                        csvWriter.println(regionId.toString() + ',' + "2023-01-" + i + ',' + demand.toString() + ',' + temp.toString());
+                        csvWriter.println(regionId.toString() + ',' + date + ',' + demand.toString() + ',' + temp.toString());
                     }
                     csvWriter.close();
                     return RepeatStatus.FINISHED;
@@ -99,17 +99,17 @@ public class BatchConfig {
                 .build();
     }
 
-    public String[] getDays(String anioMes) {
+    public String[] getDates(String anioMes) {
         YearMonth yearMonth = YearMonth.parse(anioMes);
         int daysInMonth = yearMonth.lengthOfMonth();
-        String[] days = new String[daysInMonth];
+        String[] dates = new String[daysInMonth];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (int day = 1; day <= daysInMonth; day++) {
             LocalDate date = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), day);
             String dayString = date.format(formatter);
-            days[day - 1] = dayString;
+            dates[day - 1] = dayString;
         }
-        return days;
+        return dates;
     }
 }
 
