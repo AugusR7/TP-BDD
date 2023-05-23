@@ -4,14 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "demand_on_date")
-//@AllArgsConstructor
 @NoArgsConstructor
 public @Data class DemandOnDate implements Serializable {
     @Id
@@ -22,8 +17,7 @@ public @Data class DemandOnDate implements Serializable {
     @Column(name = "date")
     private String date;
 
-    // Lazy porque cuando queremos ver la demanda, se hará con varias demandas a la vez, y no necesariamente vamos a traer a la region (?)
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // Cascade remove para que cuando se pide remover una region, se removeran las demandas asociadas a la misma
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_region_id")
     private Region region;
 
@@ -39,6 +33,17 @@ public @Data class DemandOnDate implements Serializable {
         this.region = region;
         this.demand = demand;
         this.temperature = temperature;
+    }
+
+    @Override
+    public String toString(){
+        return "DemandOnDate{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", region=" + region +
+                ", demand=" + demand +
+                ", temperature=" + temperature +
+                '}';
     }
 
 }

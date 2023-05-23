@@ -37,12 +37,10 @@ public class RegionService {
 
     public String deleteRegion(Integer id) {
         if (regionRepository.existsById(id)) {
-
-            demandRepository.deleteByRegion(id);
             regionRepository.deleteById(id);
             return "Region con id " + id + " eliminada";
         } else {
-            return "Region con id " + id + " no existe";
+            return "La region con id " + id + " no existe";
         }
     }
 

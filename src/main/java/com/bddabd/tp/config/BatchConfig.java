@@ -7,8 +7,6 @@ import com.bddabd.tp.service.RegionService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -28,12 +26,12 @@ import java.util.*;
 import java.util.logging.Logger;
 
 @Configuration
-//@EnableBatchProcessing
 public class BatchConfig {
 
-    @Autowired DemandService demandService;
-    @Autowired RegionService regionService;
-
+    @Autowired
+    DemandService demandService;
+    @Autowired
+    RegionService regionService;
 
     private static final Logger log = Logger.getLogger(String.valueOf(BatchConfig.class));
 
@@ -49,7 +47,7 @@ public class BatchConfig {
 
     @Bean
     public Step step1(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("create csv", jobRepository)
+        return new StepBuilder("create csv with demands", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     JobParameters jobParameters = chunkContext.getStepContext().getStepExecution().getJobParameters();
                     String yearMonth = jobParameters.getString("fecha");
@@ -79,19 +77,20 @@ public class BatchConfig {
 
     @Bean
     public Step step2(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-        return new StepBuilder("load csv", jobRepository)
+        return new StepBuilder("load csv to save demands", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     File csvFile = new File("demands_temperatures.csv");
                     Scanner csvReader = new Scanner(csvFile);
                     while (csvReader.hasNextLine()) {
                         String[] data = csvReader.nextLine().split(",");
                         Region region = regionService.getRegionById(Integer.parseInt(data[0]));
-                        log.info("Se creó: " + demandService.createDemand(
+//                        log.info("Se creó: " +
+                        demandService.createDemand(
                                 String.valueOf(data[1]),
                                 region,
                                 Integer.parseInt(data[2]),
-                                Double.parseDouble(data[3])
-                        ));
+                                Double.parseDouble(data[3]));
+//                        );
                     }
                     csvReader.close();
                     return RepeatStatus.FINISHED;

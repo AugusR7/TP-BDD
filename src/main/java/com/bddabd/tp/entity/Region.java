@@ -22,13 +22,20 @@ public class Region implements Serializable {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
-//    @Column(name = "demand_on_date")
-//    private List<DemandOnDate> demandOnDate = new ArrayList<>();
-
+    @OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<DemandOnDate> demandOnDate = new ArrayList<>();
 
     public Region(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Region{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
 }
