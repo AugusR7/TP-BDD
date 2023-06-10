@@ -22,7 +22,7 @@ public class Region implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<DemandOnDate> demandOnDate = new ArrayList<>();
 
     public Region(Integer id, String name) {

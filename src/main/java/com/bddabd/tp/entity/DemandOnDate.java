@@ -17,10 +17,9 @@ public @Data class DemandOnDate implements Serializable {
     @Column(name = "date")
     private String date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_region_id")
     private Region region;
-
 
     @Column
     private Integer demand;

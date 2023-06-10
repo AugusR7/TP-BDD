@@ -18,12 +18,6 @@ public class CammesaService {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-//    public String healthCheck() {
-//        return restTemplateBuilder
-//                .build()
-//                .getForObject("https://api.cammesa.com/demanda-svc/ping", String.class);
-//    }
-
     public String esFeriado(String fecha) {
         return restTemplateBuilder
                 .build()
@@ -31,20 +25,15 @@ public class CammesaService {
                         String.class);
     }
 
-    public String feriadoMasCercano(String fecha) throws DateException { //Retorna el feriado mas cercano
-        //YYYY-MM-DD
+    public String feriadoMasCercano(String fecha) throws DateException {
         LocalDate today = LocalDate.now();
         LocalDate date = LocalDate.parse(fecha, DateTimeFormatter.ISO_LOCAL_DATE);
-
         LocalDate feriadoMasCercano = LocalDate.parse(fecha);
 
-        if (date.isAfter(today)) {
-            throw new DateException("La fecha ingresada es mayor a la fecha actual");
-        }
-        int i = 1;
-
+        if (date.isAfter(today)) throw new DateException("La fecha ingresada es mayor a la fecha actual");
         boolean esFeriado = parseBoolean(esFeriado(fecha));
 
+        int i = 1;
         while (!esFeriado) {
             LocalDate dayAfter = date.plusDays(i);
             esFeriado = parseBoolean(esFeriado(dayAfter.toString()));
@@ -53,9 +42,7 @@ public class CammesaService {
             } else {
                 LocalDate dayBefore = date.minusDays(i);
                 esFeriado = parseBoolean(esFeriado(dayBefore.toString()));
-                if (esFeriado) {
-                    feriadoMasCercano = dayBefore;
-                }
+                if (esFeriado) feriadoMasCercano = dayBefore;
             }
             i++;
         }
