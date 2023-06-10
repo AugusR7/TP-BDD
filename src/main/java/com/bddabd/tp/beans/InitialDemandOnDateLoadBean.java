@@ -6,6 +6,8 @@ import com.bddabd.tp.service.DemandService;
 import com.bddabd.tp.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -21,13 +23,12 @@ public class InitialDemandOnDateLoadBean {
 
     public void initialDemandLoad() {
         List<HashMap> allRegions = regionService.getRegions();
-        List dates = getDatesOfAYear("2022");
+        String[] dates = generateYearDates(2022);
         LOG.info("Initial load of demand on date of regions");
 
         for (HashMap oneRegion : allRegions) {
-//        for (int i = 0; i < 2; i++) {
-//            HashMap oneRegion = allRegions.get(i);
             Region region = regionService.getRegionById((Integer) oneRegion.get("id"));
+            LOG.info("Loading for region: " + region.getName() + " with id: " + region.getId() + " started");
             for (Object date : dates) {
                 List<HashMap> demandAndTempOnDate = demandService.demandaYTemperaturaEnFecha((String) date, (Integer) region.getId());
                 List regionDemand = new ArrayList<Integer>();
@@ -50,89 +51,19 @@ public class InitialDemandOnDateLoadBean {
         LOG.info("Initial load of demand on dates finished");
     }
 
-    public List<String> getDatesOfAYear(String year) {
-        List<String> dates = new ArrayList<>();
-        String[] days = getDays();
-        String[] months = getMonths();
+    public String[] generateYearDates(int year) {
+//        int daysInYear = LocalDate.ofYearDay(year, 365).getDayOfYear();
+        int daysInYear = 31;
+        String[] dates = new String[daysInYear];
 
-        //for (int i = 0; i < months.length; i++) {
-          //  if (i == 1) {
-            //    for (int e = 0; e < 28; e++) {
-              //      dates.add(year + '-' + months[i] + '-' + days[e]);
-               // }
-           // } else {
-             //   for (int z = 0; z < 30; z++) {
-               //     dates.add(year + '-' + months[i] + '-' + days[z]);
-                //}
-                //if (i != 3 && i != 5 && i != 8 && i != 10) {
-                 //   dates.add(year + '-' + months[i] + '-' + days[30]);
-               // }
-           // }
-        //}
+        LocalDate date = LocalDate.ofYearDay(year, 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        dates.add("2022-11-01");
-        dates.add("2022-11-02");
-        dates.add("2022-11-03");
-        dates.add("2022-11-04");
-        dates.add("2022-11-05");
-        dates.add("2022-11-06");
-        dates.add("2022-11-07");
-        dates.add("2022-11-08");
-        dates.add("2022-11-09");
-        dates.add("2022-11-10");
-        dates.add("2022-11-11");
-        dates.add("2022-11-12");
-        dates.add("2022-11-13");
-        dates.add("2022-11-14");
-        dates.add("2022-11-15");
-        dates.add("2022-11-16");
-        dates.add("2022-11-17");
-        dates.add("2022-11-18");
-        dates.add("2022-11-19");
-        dates.add("2022-11-20");
-        dates.add("2022-11-21");
-        dates.add("2022-11-22");
-        dates.add("2022-11-23");
-        dates.add("2022-11-24");
-        dates.add("2022-11-25");
-        dates.add("2022-11-26");
-        dates.add("2022-11-27");
-        dates.add("2022-11-28");
-        dates.add("2022-11-29");
-        dates.add("2022-11-30");
+        for (int i = 0; i < daysInYear; i++) {
+            dates[i] = date.format(formatter);
+            date = date.plusDays(1);
+        }
 
         return dates;
-    }
-
-    public String[] getDays() {
-        String[] days = new String[31];
-        for (int d = 1; d < 32; d++) {
-            String day;
-            if (d < 10) {
-                day = "0" + Integer.toString(d);
-            } else {
-                day = Integer.toString(d);
-            }
-            days[d - 1] = day;
-        }
-        LOG.info("Days: " + Arrays.toString(days));
-        return days;
-    }
-
-    public String[] getMonths() {
-        int size = 12;
-        String[] months = new String[size];
-//        for (int m = 1; m < 13; m++) {
-        for (int m = 1; m < size + 1; m++) {
-            String month;
-            if (m < 10) {
-                month = "0" + Integer.toString(m);
-            } else {
-                month = Integer.toString(m);
-            }
-            months[m - 1] = month;
-        }
-        LOG.info("Months: " + Arrays.toString(months));
-        return months;
     }
 }
